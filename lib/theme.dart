@@ -12,10 +12,12 @@ Color backgroundColor2 = Color(0xff2B2937);
 Color backgroundColor3 = Color(0xff242231);
 Color primaryTextColor = Color(0xffF1F0F2);
 Color secondaryTextColor = Color(0xff999999);
+Color subtitleTextColor = Color(0xff504f5e);
 
 TextStyle primaryTextStyle = GoogleFonts.poppins(color: primaryTextColor);
 TextStyle secondaryTextStyle = GoogleFonts.poppins(color: secondaryTextColor);
 TextStyle priceTextStyle = GoogleFonts.poppins(color: priceColor);
+TextStyle subtitleTextStyle = GoogleFonts.poppins(color: subtitleTextColor);
 
 FontWeight light = FontWeight.w300;
 FontWeight regular = FontWeight.w400;
