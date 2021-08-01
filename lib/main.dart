@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mastore_app/pages/detail_chat_page.dart';
+import 'package:mastore_app/pages/home/main_page.dart';
 import 'package:mastore_app/pages/sign_in_page.dart';
+import 'package:mastore_app/pages/sign_up_page.dart';
 import 'package:mastore_app/pages/splash_page.dart';
 
 void main() {
@@ -16,6 +19,9 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => SplashPage(),
         '/sign-in': (context) => SignInPage(),
+        '/sign-up': (context) => SignUpPage(),
+        '/home': (context) => MainPage(),
+        '/detail-chat': (context) => DetailChatPage(),
       },
     );
   }
