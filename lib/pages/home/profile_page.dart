@@ -47,9 +47,15 @@ class ProfilePage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Image.asset(
-                    'assets/pp.png',
-                    width: 28,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/sign-in', (route) => false);
+                    },
+                    child: Image.asset(
+                      'assets/pp.png',
+                      width: 28,
+                    ),
                   )
                 ],
               ),
@@ -66,7 +72,19 @@ class ProfilePage extends StatelessWidget {
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [],
+          children: [
+            Text(
+              text,
+              style: secondaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: regular,
+              ),
+            ),
+            Icon(
+              Icons.chevron_right,
+              color: secondaryTextColor,
+            )
+          ],
         ),
       );
     }
@@ -86,17 +104,42 @@ class ProfilePage extends StatelessWidget {
             Text(
               'Account',
               style: primaryTextStyle.copyWith(
-                fontSize: 20,
+                fontSize: 22,
                 fontWeight: medium,
               ),
             ),
-            SizedBox(
-              height: 8,
-            ),
-            Expanded(
-              child: Row(
-                children: [Text('data')],
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, '/edit-profile');
+              },
+              child: menuItem(
+                'Edit profile',
               ),
+            ),
+            menuItem(
+              'Your orders',
+            ),
+            menuItem(
+              'Help',
+            ),
+            SizedBox(
+              height: 32,
+            ),
+            Text(
+              'General',
+              style: primaryTextStyle.copyWith(
+                fontSize: 22,
+                fontWeight: medium,
+              ),
+            ),
+            menuItem(
+              'Privacy & Policy',
+            ),
+            menuItem(
+              'Term of service',
+            ),
+            menuItem(
+              'Rate App',
             ),
           ],
         ),
