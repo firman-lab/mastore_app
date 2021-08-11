@@ -93,7 +93,7 @@ class ProfilePage extends StatelessWidget {
       return Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: backgroundColor3,
+          color: backgroundColor1,
         ),
         margin: EdgeInsets.all(
           defaultMargin,
