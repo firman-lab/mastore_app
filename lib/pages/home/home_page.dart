@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mastore_app/theme.dart';
-import 'package:mastore_app/widgets/productCard.dart';
+import 'package:mastore_app/widgets/product_card.dart';
 import 'package:mastore_app/widgets/product_tile.dart';
 
 class HomePage extends StatelessWidget {
