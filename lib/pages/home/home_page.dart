@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:mastore_app/models/user_model.dart';
+import 'package:mastore_app/provider/auth_provider.dart';
 import 'package:mastore_app/theme.dart';
 import 'package:mastore_app/widgets/product_card.dart';
 import 'package:mastore_app/widgets/product_tile.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
+
     Widget header() {
       return Container(
         margin: EdgeInsets.only(
@@ -20,14 +26,14 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Hallo, Firman',
+                    'Hallo, ${user.name}',
                     style: primaryTextStyle.copyWith(
                       fontSize: 24,
                       fontWeight: medium,
                     ),
                   ),
                   Text(
-                    '@upil',
+                    '@${user.username}',
                     style: subtitleTextStyle.copyWith(
                       fontSize: 14,
                       fontWeight: medium,
@@ -42,9 +48,7 @@ class HomePage extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: AssetImage(
-                    'assets/pp.png',
-                  ),
+                  image: NetworkImage('${user.profilePhotoUrl}'),
                 ),
               ),
             ),

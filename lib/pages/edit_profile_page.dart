@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:mastore_app/models/user_model.dart';
+import 'package:mastore_app/provider/auth_provider.dart';
 import 'package:mastore_app/theme.dart';
+import 'package:provider/provider.dart';
 
 class EditProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModel user = authProvider.user;
+
     PreferredSizeWidget header() {
       return AppBar(
         backgroundColor: backgroundColor3,
@@ -49,7 +55,7 @@ class EditProfilePage extends StatelessWidget {
             TextFormField(
               style: primaryTextStyle,
               decoration: InputDecoration(
-                hintText: 'Firman Hidiyit',
+                hintText: user.name,
                 hintStyle: primaryTextStyle.copyWith(
                   fontWeight: medium,
                 ),
@@ -81,7 +87,7 @@ class EditProfilePage extends StatelessWidget {
             TextFormField(
               style: primaryTextStyle,
               decoration: InputDecoration(
-                hintText: '@opeel',
+                hintText: '@${user.username}',
                 hintStyle: primaryTextStyle.copyWith(
                   fontWeight: medium,
                 ),
@@ -114,7 +120,7 @@ class EditProfilePage extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
               style: primaryTextStyle,
               decoration: InputDecoration(
-                hintText: 'firminhid@gmail.com',
+                hintText: user.email,
                 hintStyle: primaryTextStyle.copyWith(
                   fontWeight: medium,
                 ),
@@ -148,7 +154,8 @@ class EditProfilePage extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: AssetImage('assets/pp.png'),
+                  fit: BoxFit.fill,
+                  image: NetworkImage('${user.profilePhotoUrl}'),
                 ),
               ),
             ),

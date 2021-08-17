@@ -314,7 +314,13 @@ class _SignUpPageState extends State<SignUpPage> {
         width: double.infinity,
         margin: EdgeInsets.only(top: 40),
         child: TextButton(
-          onPressed: handleSignUp,
+          onPressed: () {
+            // print(nameController.text);
+            // print(usernameController.text);
+            // print(emailController.text);
+            // print(passwordController.text);
+            handleSignUp();
+          },
           style: TextButton.styleFrom(
               backgroundColor: primaryColor,
               shape: RoundedRectangleBorder(
