@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:mastore_app/models/product_model.dart';
 import 'package:mastore_app/models/user_model.dart';
 import 'package:http/http.dart' as http;
 

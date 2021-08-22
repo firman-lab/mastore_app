@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:mastore_app/models/product_model.dart';
 import 'package:mastore_app/models/user_model.dart';
 import 'package:mastore_app/services/auth_service.dart';
+import 'package:mastore_app/widgets/product_card.dart';
 
 class AuthProvider with ChangeNotifier {
   late UserModel _user;

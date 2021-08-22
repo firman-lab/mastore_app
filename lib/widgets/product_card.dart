@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:mastore_app/models/product_model.dart';
+import 'package:mastore_app/pages/product_page.dart';
 import 'package:mastore_app/theme.dart';
 
 class ProductCard extends StatelessWidget {
+  final ProductModel product;
+  ProductCard(this.product);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductPage(product),
+          ),
+        );
       },
       child: Container(
         width: 215,
@@ -19,12 +29,13 @@ class ProductCard extends StatelessWidget {
           color: Color(0xffecedef),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
               height: 30,
             ),
-            Image.asset(
-              'assets/image_shoes.png',
+            Image.network(
+              product.galleries![0].url!,
               width: 215,
               height: 150,
               fit: BoxFit.cover,
@@ -37,7 +48,7 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Running',
+                    product.category!.name!,
                     style: secondaryTextStyle.copyWith(
                       fontSize: 12,
                     ),
@@ -46,18 +57,19 @@ class ProductCard extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    'COURT Runner VX2adf dawdadasdad dfa',
+                    product.name!,
                     style: blackTextStyle.copyWith(
                       fontSize: 17,
                       fontWeight: semiBold,
                     ),
                     overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                   SizedBox(
                     height: 6,
                   ),
                   Text(
-                    'Rp. 2.345.000',
+                    '\$ ${product.price.toString()}',
                     style: priceTextStyle.copyWith(
                       fontSize: 14,
                       fontWeight: medium,

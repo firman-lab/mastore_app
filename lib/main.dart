@@ -7,6 +7,8 @@ import 'package:mastore_app/pages/sign_in_page.dart';
 import 'package:mastore_app/pages/sign_up_page.dart';
 import 'package:mastore_app/pages/splash_page.dart';
 import 'package:mastore_app/provider/auth_provider.dart';
+import 'package:mastore_app/provider/product_provider.dart';
+import 'package:mastore_app/provider/whislist_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -22,6 +24,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => AuthProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ProductProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => WhislistProvider(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -33,7 +41,6 @@ class MyApp extends StatelessWidget {
           '/home': (context) => MainPage(),
           '/detail-chat': (context) => DetailChatPage(),
           '/edit-profile': (context) => EditProfilePage(),
-          '/product': (context) => ProductPage(),
         },
       ),
     );

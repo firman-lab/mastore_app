@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:mastore_app/models/product_model.dart';
+import 'package:mastore_app/pages/product_page.dart';
 import 'package:mastore_app/theme.dart';
 
 class ProductTile extends StatelessWidget {
+  final ProductModel product;
+  ProductTile(this.product);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/product');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductPage(product),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -20,8 +30,8 @@ class ProductTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(
                 12,
               ),
-              child: Image.asset(
-                'assets/football_shoes.png',
+              child: Image.network(
+                product.galleries![0].url!,
                 width: 120,
                 height: 120,
                 fit: BoxFit.cover,
@@ -35,7 +45,7 @@ class ProductTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Football',
+                    product.category!.name!,
                     style: secondaryTextStyle.copyWith(
                       fontSize: 12,
                     ),
@@ -44,7 +54,7 @@ class ProductTile extends StatelessWidget {
                     height: 6,
                   ),
                   Text(
-                    'Predator Series Z7',
+                    product.name!,
                     style: primaryTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: semiBold,
@@ -55,7 +65,7 @@ class ProductTile extends StatelessWidget {
                     height: 8,
                   ),
                   Text(
-                    'Rp. 1.449.000',
+                    '\$ ${product.price.toString()}',
                     style: priceTextStyle.copyWith(
                       fontSize: 14,
                       fontWeight: regular,

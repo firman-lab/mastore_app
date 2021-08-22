@@ -1,8 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:mastore_app/models/product_model.dart';
+import 'package:mastore_app/models/user_model.dart';
+import 'package:mastore_app/provider/auth_provider.dart';
+import 'package:mastore_app/provider/product_provider.dart';
+import 'package:mastore_app/provider/whislist_provider.dart';
 import 'package:mastore_app/theme.dart';
+import 'package:mastore_app/widgets/familiar_tile.dart';
+import 'package:provider/provider.dart';
 
 class ProductPage extends StatefulWidget {
+  final ProductModel product;
+  ProductPage(this.product);
+
   @override
   _ProductPageState createState() => _ProductPageState();
 }
@@ -32,6 +42,11 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    ProductProvider productProvider = Provider.of<ProductProvider>(context);
+
+    WhislistProvider whislistProvider = Provider.of<WhislistProvider>(context);
+
     Widget indicator(int index) {
       return Container(
         margin: EdgeInsets.symmetric(
@@ -89,10 +104,10 @@ class _ProductPageState extends State<ProductPage> {
       return Column(
         children: [
           CarouselSlider(
-            items: images
+            items: widget.product.galleries!
                 .map(
-                  (image) => Image.asset(
-                    image,
+                  (image) => Image.network(
+                    image.url!,
                     width: MediaQuery.of(context).size.width,
                     height: 318,
                     fit: BoxFit.cover,
@@ -113,7 +128,7 @@ class _ProductPageState extends State<ProductPage> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: images.map((e) {
+            children: widget.product.galleries!.map((e) {
               index++;
               return indicator(index);
             }).toList(),
@@ -164,7 +179,7 @@ class _ProductPageState extends State<ProductPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Addidas TarrexSP Low',
+                          widget.product.name!,
                           style: primaryTextStyle.copyWith(
                             fontSize: 18,
                             fontWeight: semiBold,
@@ -172,7 +187,7 @@ class _ProductPageState extends State<ProductPage> {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          'Running',
+                          widget.product.category!.name!,
                           style: secondaryTextStyle.copyWith(
                             fontSize: 12,
                           ),
@@ -180,9 +195,38 @@ class _ProductPageState extends State<ProductPage> {
                       ],
                     ),
                   ),
-                  Image.asset(
-                    'assets/whislist_icon.png',
-                    width: 46,
+                  GestureDetector(
+                    onTap: () {
+                      whislistProvider.setProduct(widget.product);
+
+                      if (whislistProvider.isWhishlist(widget.product)) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: secondaryColor,
+                            content: Text(
+                              'Has been added to wishlist',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: alertColor,
+                            content: Text(
+                              'Has been removed to wishlist',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    child: Image.asset(
+                      whislistProvider.isWhishlist(widget.product)
+                          ? 'assets/whislist_icon.png'
+                          : 'assets/home.png',
+                      width: 46,
+                    ),
                   ),
                 ],
               ),
@@ -206,7 +250,7 @@ class _ProductPageState extends State<ProductPage> {
                     style: primaryTextStyle,
                   ),
                   Text(
-                    'Rp 1.245.000',
+                    '\$ ${widget.product.price.toString()}',
                     style: priceTextStyle.copyWith(
                       fontSize: 16,
                       fontWeight: semiBold,
@@ -236,7 +280,7 @@ class _ProductPageState extends State<ProductPage> {
                     height: 12,
                   ),
                   Text(
-                    'Unpaved trails and mixed surfaces are easy when you have the traction and support you need. Casual enough for the daily commute.',
+                    widget.product.description!,
                     style: secondaryTextStyle.copyWith(
                       fontWeight: light,
                     ),
@@ -270,14 +314,19 @@ class _ProductPageState extends State<ProductPage> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: fimiliar_shoes.map((image) {
+                      children: productProvider.products.map((product) {
                         index++;
                         return Container(
                           margin: EdgeInsets.only(
-                              left: index == 0 ? defaultMargin : 0),
-                          child: fimiliarShoes(image),
+                              left: index == 0 ? defaultMargin : 8),
+                          child: FamiliarTile(product),
                         );
                       }).toList(),
+                      // children: productProvider.products
+                      //     .map(
+                      //       (product) => FamiliarTile(product),
+                      //     )
+                      //     .toList(),
                     ),
                   ),
                 ],

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:mastore_app/provider/whislist_provider.dart';
 import 'package:mastore_app/theme.dart';
 import 'package:mastore_app/widgets/whistlist_card.dart';
+import 'package:provider/provider.dart';
 
 class WhislistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    WhislistProvider whislistProvider = Provider.of<WhislistProvider>(context);
+
     Widget header() {
       return AppBar(
         backgroundColor: backgroundColor1,
@@ -82,12 +86,9 @@ class WhislistPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(
               horizontal: 20,
             ),
-            children: [
-              WhislistCard(),
-              WhislistCard(),
-              WhislistCard(),
-              WhislistCard(),
-            ],
+            children: whislistProvider.whishlist
+                .map((product) => WhislistCard())
+                .toList(),
           ),
         ),
       );
@@ -96,8 +97,7 @@ class WhislistPage extends StatelessWidget {
     return Column(
       children: [
         header(),
-        //emptyWishlist(),
-        content(),
+        whislistProvider.whishlist.length == 0 ? emptyWishlist() : content(),
       ],
     );
   }
