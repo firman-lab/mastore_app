@@ -2,7 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:mastore_app/models/product_model.dart';
 import 'package:mastore_app/models/user_model.dart';
+import 'package:mastore_app/pages/detail_chat_page.dart';
 import 'package:mastore_app/provider/auth_provider.dart';
+import 'package:mastore_app/provider/cart_provider.dart';
 import 'package:mastore_app/provider/product_provider.dart';
 import 'package:mastore_app/provider/whislist_provider.dart';
 import 'package:mastore_app/theme.dart';
@@ -42,10 +44,90 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
     ProductProvider productProvider = Provider.of<ProductProvider>(context);
-
     WhislistProvider whislistProvider = Provider.of<WhislistProvider>(context);
+    CartProvider cartProvider = Provider.of<CartProvider>(context);
+
+    Future<void> showSuccessDialog() async {
+      return showDialog(
+        context: context,
+        builder: (BuildContext context) => Container(
+          width: MediaQuery.of(context).size.width - (2 * defaultMargin),
+          child: AlertDialog(
+            backgroundColor: backgroundColor4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.close,
+                        color: primaryTextColor,
+                      ),
+                    ),
+                  ),
+                  Image.asset(
+                    'assets/checklist.png',
+                    width: 100,
+                  ),
+                  SizedBox(
+                    height: 12,
+                  ),
+                  Text(
+                    'Hurrray :)',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 16,
+                      fontWeight: semiBold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    'Item added successfully',
+                    style: secondaryTextStyle.copyWith(
+                      fontWeight: medium,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 18,
+                  ),
+                  Container(
+                    width: 154,
+                    height: 44,
+                    child: TextButton(
+                      onPressed: () {
+                        //Navigator.pop(context);
+                        Navigator.pushReplacementNamed(context, '/cart');
+                      },
+                      child: Text(
+                        'View my cart',
+                        style: primaryTextStyle,
+                      ),
+                      style: TextButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      );
+    }
 
     Widget indicator(int index) {
       return Container(
@@ -88,9 +170,14 @@ class _ProductPageState extends State<ProductPage> {
                     color: Color(0xff000000),
                   ),
                 ),
-                Icon(
-                  Icons.shopping_bag,
-                  color: primaryColor,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/cart');
+                  },
+                  child: Icon(
+                    Icons.shopping_bag,
+                    color: primaryColor,
+                  ),
                 ),
               ],
             ),
@@ -224,7 +311,7 @@ class _ProductPageState extends State<ProductPage> {
                     child: Image.asset(
                       whislistProvider.isWhishlist(widget.product)
                           ? 'assets/whislist_icon.png'
-                          : 'assets/home.png',
+                          : 'assets/not_wishlist.png',
                       width: 46,
                     ),
                   ),
@@ -337,13 +424,23 @@ class _ProductPageState extends State<ProductPage> {
               margin: EdgeInsets.all(defaultMargin),
               child: Row(
                 children: [
-                  Container(
-                    width: 54,
-                    height: 54,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage(
-                          'assets/button_chat.png',
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailChatPage(widget.product),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 54,
+                      height: 54,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(
+                            'assets/button_chat.png',
+                          ),
                         ),
                       ),
                     ),
@@ -355,7 +452,10 @@ class _ProductPageState extends State<ProductPage> {
                     child: Container(
                       height: 54,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          cartProvider.addCart(widget.product);
+                          showSuccessDialog();
+                        },
                         style: TextButton.styleFrom(
                           primary: primaryColor,
                           shape: RoundedRectangleBorder(

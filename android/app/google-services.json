@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "960210209343",
+    "project_id": "mastore-1ec43",
+    "storage_bucket": "mastore-1ec43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:960210209343:android:e36264c14a53cafe26868a",
+        "android_client_info": {
+          "package_name": "com.example.mastore_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "960210209343-3hs3ogqfn9ie0cbnfmiv361bp3oftuen.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyByJo0x5P5Ia8DALDrRlJJd-PGpclENpB8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "960210209343-3hs3ogqfn9ie0cbnfmiv361bp3oftuen.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

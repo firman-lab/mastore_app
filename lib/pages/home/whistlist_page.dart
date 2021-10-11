@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mastore_app/provider/page_provider.dart';
 import 'package:mastore_app/provider/whislist_provider.dart';
 import 'package:mastore_app/theme.dart';
 import 'package:mastore_app/widgets/whistlist_card.dart';
@@ -8,6 +9,7 @@ class WhislistPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     WhislistProvider whislistProvider = Provider.of<WhislistProvider>(context);
+    PageProvider pageProvider = Provider.of<PageProvider>(context);
 
     Widget header() {
       return AppBar(
@@ -54,7 +56,9 @@ class WhislistPage extends StatelessWidget {
               ),
               Container(
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    pageProvider.currentIndex = 0;
+                  },
                   child: Text(
                     'Explore Store',
                     style: primaryTextStyle.copyWith(
@@ -87,7 +91,7 @@ class WhislistPage extends StatelessWidget {
               horizontal: 20,
             ),
             children: whislistProvider.whishlist
-                .map((product) => WhislistCard())
+                .map((product) => WhislistCard(product))
                 .toList(),
           ),
         ),

@@ -1,10 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:mastore_app/models/message_model.dart';
+import 'package:mastore_app/models/product_model.dart';
+import 'package:mastore_app/provider/auth_provider.dart';
+import 'package:mastore_app/services/messages_service.dart';
 import 'package:mastore_app/theme.dart';
 import 'package:mastore_app/widgets/chat_bubble.dart';
+import 'package:provider/provider.dart';
 
-class DetailChatPage extends StatelessWidget {
+class DetailChatPage extends StatefulWidget {
+  ProductModel product;
+  DetailChatPage(this.product);
+
+  @override
+  _DetailChatPageState createState() => _DetailChatPageState();
+}
+
+class _DetailChatPageState extends State<DetailChatPage> {
+  TextEditingController messageController = TextEditingController(text: '');
+
   @override
   Widget build(BuildContext context) {
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    handleAddMessage() async {
+      await MessageService().addMessage(
+        authProvider.user,
+        true,
+        messageController.text,
+        widget.product,
+      );
+      setState(() {
+        widget.product = UninitializedProductModel();
+        messageController.text = '';
+      });
+    }
+
     PreferredSizeWidget header() {
       return PreferredSize(
         preferredSize: Size.fromHeight(70),
@@ -74,8 +104,8 @@ class DetailChatPage extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
-              child: Image.asset(
-                'assets/image_shoes.png',
+              child: Image.network(
+                widget.product.galleries![0].url!,
                 width: 54,
               ),
             ),
@@ -88,7 +118,7 @@ class DetailChatPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'COURT Runner Z2',
+                    widget.product.name!,
                     style: primaryTextStyle.copyWith(
                       fontSize: 16,
                     ),
@@ -98,7 +128,7 @@ class DetailChatPage extends StatelessWidget {
                     height: 2,
                   ),
                   Text(
-                    'Rp. 2.345.000',
+                    "\$ " + widget.product.price.toString(),
                     style: priceTextStyle.copyWith(
                       fontWeight: medium,
                     ),
@@ -109,9 +139,16 @@ class DetailChatPage extends StatelessWidget {
             SizedBox(
               width: 2,
             ),
-            Image.asset(
-              'assets/btn_close.png',
-              width: 22,
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  widget.product = UninitializedProductModel();
+                });
+              },
+              child: Image.asset(
+                'assets/btn_close.png',
+                width: 22,
+              ),
             ),
           ],
         ),
@@ -129,7 +166,9 @@ class DetailChatPage extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                productPreview(),
+                widget.product is UninitializedProductModel
+                    ? SizedBox()
+                    : productPreview(),
                 Row(
                   children: [
                     Expanded(
@@ -145,6 +184,7 @@ class DetailChatPage extends StatelessWidget {
                         ),
                         child: Center(
                           child: TextFormField(
+                            controller: messageController,
                             minLines: 1,
                             maxLines: 5,
                             keyboardType: TextInputType.multiline,
@@ -160,9 +200,12 @@ class DetailChatPage extends StatelessWidget {
                     SizedBox(
                       width: 20,
                     ),
-                    Image.asset(
-                      'assets/send_button.png',
-                      width: 45,
+                    GestureDetector(
+                      onTap: handleAddMessage,
+                      child: Image.asset(
+                        'assets/send_button.png',
+                        width: 45,
+                      ),
                     ),
                   ],
                 ),
@@ -174,28 +217,30 @@ class DetailChatPage extends StatelessWidget {
     }
 
     Widget content() {
-      return ListView(
-        padding: EdgeInsets.symmetric(
-          horizontal: defaultMargin,
-        ),
-        children: [
-          BubbleChat(
-            isSender: true,
-            text: 'Hi, This item is still available?',
-            hasProduct: true,
-          ),
-          BubbleChat(
-            isSender: false,
-            text: 'Good night, This item is only available in size 42 and 43',
-            hasProduct: false,
-          ),
-          BubbleChat(
-            isSender: true,
-            text: 'Laaah, cilik neeeemn siiiiiih',
-            hasProduct: false,
-          ),
-        ],
-      );
+      return StreamBuilder<List<MessageModel>>(
+          stream: MessageService()
+              .getMessagesByUserId(userId: authProvider.user.id),
+          builder: (context, snapshot) {
+            print(snapshot.hasData);
+            if (snapshot.hasData) {
+              return ListView(
+                padding: EdgeInsets.symmetric(
+                  horizontal: defaultMargin,
+                ),
+                children: snapshot.data!
+                    .map((MessageModel message) => BubbleChat(
+                          isSender: message.isFromUser!,
+                          text: message.message!,
+                          product: message.product!,
+                        ))
+                    .toList(),
+              );
+            } else {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          });
     }
 
     return Scaffold(

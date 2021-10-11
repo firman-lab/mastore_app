@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:mastore_app/models/message_model.dart';
+import 'package:mastore_app/models/product_model.dart';
+import 'package:mastore_app/pages/detail_chat_page.dart';
 import 'package:mastore_app/theme.dart';
 
 class ChatTile extends StatelessWidget {
+  final MessageModel message;
+  ChatTile(this.message);
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/detail-chat');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DetailChatPage(
+              UninitializedProductModel(),
+            ),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.only(top: 33),
@@ -40,7 +53,7 @@ class ChatTile extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Hello, I\'m Sabrina. can I help you? adsfdf afe af',
+                        message.message!,
                         style: secondaryTextStyle.copyWith(
                           fontWeight: light,
                         ),

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mastore_app/models/product_model.dart';
 import 'package:mastore_app/theme.dart';
 
 class BubbleChat extends StatelessWidget {
-  final String text;
-  final bool isSender;
-  final bool hasProduct;
+  final String? text;
+  final bool? isSender;
+  final ProductModel? product;
 
-  BubbleChat({this.isSender = false, this.text = '', this.hasProduct = false});
+  BubbleChat({this.isSender = false, this.text = '', this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +21,12 @@ class BubbleChat extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(isSender ? 12 : 0),
-            topRight: Radius.circular(isSender ? 0 : 12),
+            topLeft: Radius.circular(isSender! ? 12 : 0),
+            topRight: Radius.circular(isSender! ? 0 : 12),
             bottomLeft: Radius.circular(12),
             bottomRight: Radius.circular(12),
           ),
-          color: isSender ? backgroundColor5 : backgroundColor4,
+          color: isSender! ? backgroundColor5 : backgroundColor4,
         ),
         child: Column(
           children: [
@@ -33,8 +34,8 @@ class BubbleChat extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
-                    'assets/image_shoes.png',
+                  child: Image.network(
+                    product!.galleries![0].url!,
                     width: 70,
                   ),
                 ),
@@ -46,7 +47,7 @@ class BubbleChat extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'COURT Visoin ZX2',
+                        product!.name!,
                         style: primaryTextStyle.copyWith(
                           fontSize: 16,
                           fontWeight: regular,
@@ -58,7 +59,7 @@ class BubbleChat extends StatelessWidget {
                         height: 4,
                       ),
                       Text(
-                        'Rp. 2.345.000',
+                        product!.price.toString(),
                         style: priceTextStyle.copyWith(
                           fontWeight: medium,
                         ),
@@ -122,12 +123,12 @@ class BubbleChat extends StatelessWidget {
       margin: EdgeInsets.only(top: defaultMargin),
       child: Column(
         crossAxisAlignment:
-            isSender ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            isSender! ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          hasProduct ? productPreview() : SizedBox(),
+          product is UninitializedProductModel ? SizedBox() : productPreview(),
           Row(
             mainAxisAlignment:
-                isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+                isSender! ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               Flexible(
                 child: Container(
@@ -137,15 +138,15 @@ class BubbleChat extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(isSender ? 12 : 0),
-                      topRight: Radius.circular(isSender ? 0 : 12),
+                      topLeft: Radius.circular(isSender! ? 12 : 0),
+                      topRight: Radius.circular(isSender! ? 0 : 12),
                       bottomLeft: Radius.circular(12),
                       bottomRight: Radius.circular(12),
                     ),
-                    color: isSender ? backgroundColor5 : backgroundColor4,
+                    color: isSender! ? backgroundColor5 : backgroundColor4,
                   ),
                   child: Text(
-                    text,
+                    text!,
                     style: primaryTextStyle.copyWith(
                       fontWeight: regular,
                     ),
