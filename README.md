@@ -1,6 +1,7 @@
 # mastore_app
 
 A new Flutter project.
+Mobile app for online store
 
 ## Getting Started
 
