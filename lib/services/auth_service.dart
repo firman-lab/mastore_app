@@ -56,7 +56,6 @@ class AuthService {
       var data = jsonDecode(response.body)['data'];
       UserModel user = UserModel.fromJson(data['user']);
       user.token = 'Bearer ' + data['access_token'];
-
       return user;
     } else {
       throw Exception('Gagal Login');

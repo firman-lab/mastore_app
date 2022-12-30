@@ -31,7 +31,6 @@ class CartProvider with ChangeNotifier {
   }
 
   addQuantity(int id) {
-    // ignore: unnecessary_statements
     _carts[id].quantity = _carts[id].quantity! + 1;
     notifyListeners();
   }
